@@ -1,0 +1,13 @@
+{
+  "name": "open-nof1-web",
+  "script": "bun",
+  "args": "run start",
+  "cwd": "/Users/charlie-macmini/Documents/python/stock/open-nof1",
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "autorestart": true,
+  "max_restarts": 10,
+  "restart_delay": 5000,
+  "time": true
+}
