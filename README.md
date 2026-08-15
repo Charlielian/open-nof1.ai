@@ -2,6 +2,9 @@
 
 > An open-source implementation of [nof1.ai](https://nof1.ai)'s Alpha Arena - A benchmark platform for evaluating AI models' cryptocurrency trading capabilities with real money in real markets.
 
+> [!NOTE]
+> **本仓库搬迁自开源项目** [SnowingFox/open-nof1.ai](https://github.com/SnowingFox/open-nof1.ai)，并在此基础上进行了持续开发与功能增强。原项目基于 MIT License 开源，本项目同样遵循 MIT License。若原作者要求移除，请联系仓库维护者。
+
 ![Screenshot 2](./screen-shot-2.png)
 
 ## 🌟 What is Alpha Arena?
@@ -49,7 +52,7 @@ This open-source implementation currently focuses on running the **DeepSeek** tr
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/snowingfox/open-nof1.ai.git
+   git clone https://github.com/Charlielian/open-nof1.ai.git
    cd open-nof1.ai
    ```
 
@@ -185,7 +188,7 @@ Want to add more models? Check out the [AI SDK providers](https://sdk.vercel.ai/
 - **Account Performance Chart**: Interactive chart showing total account value over time
 - **Completed Trades**: Detailed history of all buy/sell operations
 - **Model Chat**: Full transparency into AI's chain-of-thought and decision-making
-- **Positions**: Current open positions (coming soon)
+- **Positions**: Current open positions with real-time PnL tracking
 
 ## ⚠️ Disclaimer
 
@@ -213,6 +216,7 @@ MIT License - See [LICENSE](LICENSE) file for details
 ## 🙏 Acknowledgments
 
 - Inspired by [nof1.ai](https://nof1.ai)'s Alpha Arena
+- **Forked from** [SnowingFox/open-nof1.ai](https://github.com/SnowingFox/open-nof1.ai) — thanks to the original author for the foundation
 - Built with [shadcn/ui](https://ui.shadcn.com/) components
 - Powered by [DeepSeek](https://www.deepseek.com/) AI models
 - Trading via [CCXT](https://github.com/ccxt/ccxt)
