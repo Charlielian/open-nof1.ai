@@ -1,229 +1,236 @@
 # 🤖 Open-nof1.ai
 
-> An open-source implementation of [nof1.ai](https://nof1.ai)'s Alpha Arena - A benchmark platform for evaluating AI models' cryptocurrency trading capabilities with real money in real markets.
+> [nof1.ai](https://nof1.ai) Alpha Arena 的开源实现 — 一个用真金白银在真实市场中评估 AI 模型加密货币交易能力的基准平台。
 
 > [!NOTE]
 > **本仓库搬迁自开源项目** [SnowingFox/open-nof1.ai](https://github.com/SnowingFox/open-nof1.ai)，并在此基础上进行了持续开发与功能增强。原项目基于 MIT License 开源，本项目同样遵循 MIT License。若原作者要求移除，请联系仓库维护者。
 
-![Screenshot 2](./screen-shot-2.png)
+![界面截图](./screen-shot-2.png)
 
-## 🌟 What is Alpha Arena?
+## 🌟 什么是 Alpha Arena？
 
-Alpha Arena is a revolutionary benchmark that tests AI models where it matters most: **real financial markets with real money**. Unlike traditional AI benchmarks that rely on static datasets, Alpha Arena evaluates AI models by giving each one an initial capital of $10,000 and letting them trade cryptocurrency perpetual contracts on live markets.
+Alpha Arena 是一个革命性的基准测试平台：**给每个 AI 模型 $10,000 初始资金，让它们在真实市场中进行加密货币永续合约交易**，以此评估其能力。与传统基于静态数据集的 AI 基准测试不同，Alpha Arena 在真实金融环境中考验 AI。
 
-**Why markets are the ultimate test of intelligence:**
-- Markets are dynamic, adversarial, and open-ended
-- They challenge AI in ways that static benchmarks cannot
-- Real-time decision-making under uncertainty reveals true capabilities
-- Risk management and strategic thinking are essential
+**为什么市场是终极智力测试：**
+- 市场是动态、对抗性、开放式的
+- 对 AI 的挑战远超静态基准测试
+- 在不确定性中实时决策，检验真实能力
+- 风险管理和战略思维不可或缺
 
-## 🎯 Features
+## 🎯 功能特性
 
-This open-source implementation currently focuses on running the **DeepSeek** trading model with the following capabilities:
+本开源实现目前专注于运行 **DeepSeek** 交易模型，具备以下能力：
 
-- 🔄 **Real-time Trading**: Automated cryptocurrency trading on Binance via CCXT
-- 📊 **Live Dashboard**: Beautiful real-time charts showing account performance
-- 🧠 **AI Decision Making**: Complete chain-of-thought reasoning for every trade
-- 💹 **Multi-Asset Support**: Trade BTC, ETH, SOL, BNB, and DOGE
-- 📈 **Performance Tracking**: Detailed metrics, trade history, and profit/loss tracking
-- 🔍 **Full Transparency**: Every decision, prompt, and reasoning is logged and visible
-- ⚡ **Cron Jobs**: Automated 20-second metric collection and 3-minute trading intervals
+- 🔄 **实时交易**：通过 CCXT 在 Binance 上自动执行加密货币交易
+- 📊 **实时仪表盘**：美观的账户绩效实时图表
+- 🧠 **AI 决策**：每笔交易的完整思维链推理过程
+- 💹 **多资产支持**：交易 BTC、ETH、SOL、BNB、DOGE
+- 📈 **绩效追踪**：详细的指标、交易历史及盈亏追踪
+- 🔍 **全透明**：每次决策、提示词和推理过程均记录在案
+- ⚡ **定时任务**：每 20 秒采集指标，每 3 分钟执行交易决策
 
-## 🏗️ Tech Stack
+## 🏗️ 技术栈
 
-- **Framework**: [Next.js 15](https://nextjs.org/) with App Router & Turbopack
-- **AI SDK**: [Vercel AI SDK](https://sdk.vercel.ai/) with DeepSeek integration
-- **Database**: PostgreSQL with [Prisma ORM](https://www.prisma.io/)
-- **Trading**: [CCXT](https://github.com/ccxt/ccxt) for exchange connectivity
-- **Charts**: [Recharts](https://recharts.org/) with [shadcn/ui](https://ui.shadcn.com/)
-- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
-- **Runtime**: [Bun](https://bun.sh/) for fast package management
+- **框架**：[Next.js 15](https://nextjs.org/) + App Router + Turbopack
+- **AI SDK**：[Vercel AI SDK](https://sdk.vercel.ai/) + DeepSeek 集成
+- **数据库**：PostgreSQL + [Prisma ORM](https://www.prisma.io/)
+- **交易**：[CCXT](https://github.com/ccxt/ccxt) 交易所连接库
+- **图表**：[Recharts](https://recharts.org/) + [shadcn/ui](https://ui.shadcn.com/)
+- **样式**：[Tailwind CSS v4](https://tailwindcss.com/)
+- **运行时**：[Bun](https://bun.sh/) 快速包管理
 
-## 🚀 Getting Started
+## 🚀 快速开始
 
-### Prerequisites
+### 前置条件
 
-- [Bun](https://bun.sh/) installed
-- PostgreSQL database
-- Binance API credentials (for live trading)
-- DeepSeek API key
+- 安装 [Bun](https://bun.sh/)
+- PostgreSQL 数据库
+- Binance API 凭证（实盘交易用）
+- DeepSeek API 密钥
 
-### Installation
+### 安装步骤
 
-1. **Clone the repository**
+1. **克隆仓库**
    ```bash
    git clone https://github.com/Charlielian/open-nof1.ai.git
    cd open-nof1.ai
    ```
 
-2. **Install dependencies**
+2. **安装依赖**
    ```bash
    bun install
    ```
 
-3. **Set up environment variables**
+3. **配置环境变量**
    ```bash
    cp .env.example .env
    ```
 
-   Fill in your `.env` file:
+   编辑 `.env` 文件：
    ```env
-   # Application
+   # 应用配置
    NEXT_PUBLIC_URL="http://localhost:3000"
 
-   # Database
+   # 数据库
    DATABASE_URL="postgresql://postgres:password@localhost:5432/nof1"
 
-   # AI Models
-   DEEPSEEK_API_KEY="your_deepseek_api_key"
-   OPENROUTER_API_KEY="your_openrouter_api_key"  # Optional: for additional models
+   # AI 模型
+   DEEPSEEK_API_KEY="你的deepseek_api_key"
+   OPENROUTER_API_KEY="你的openrouter_api_key"  # 可选：其他模型用
    
-   # Market Research (Optional)
-   EXA_API_KEY="your_exa_api_key"  # For enhanced market analysis
+   # 市场数据（可选）
+   EXA_API_KEY="你的exa_api_key"  # 增强市场分析用
 
-   # Trading (Binance)
-   BINANCE_API_KEY="your_binance_api_key"
-   BINANCE_API_SECRET="your_binance_secret"
-   BINANCE_USE_SANDBOX="true"  # Set to "false" for live trading
+   # 交易（Binance）
+   BINANCE_API_KEY="你的binance_api_key"
+   BINANCE_API_SECRET="你的binance_secret"
+   BINANCE_USE_SANDBOX="true"  # 实盘交易设为 "false"
    
-   # Trading Configuration
-   START_MONEY=10000  # Initial capital in USDT (e.g., 10000 = $10,000 USDT)
+   # 交易配置
+   START_MONEY=10000  # 初始资金（USDT），例如 10000 = 10,000 USDT
 
-   # Cron Job Authentication
-   CRON_SECRET_KEY="your_secret_token"
+   # 定时任务鉴权
+   CRON_SECRET_KEY="你的密钥"
    ```
 
-4. **Set up the database**
+4. **初始化数据库**
    ```bash
    bunx prisma generate
    bunx prisma db push
    ```
 
-5. **Run the development server**
+5. **启动开发服务器**
    ```bash
    bun dev
    ```
 
-6. **Set up cron jobs** (for automated trading)
+6. **配置定时任务**（自动交易用）
 
-   You'll need to set up external cron jobs or use a service like [Vercel Cron](https://vercel.com/docs/cron-jobs) to call these endpoints:
+   设置外部 cron 任务或使用 [Vercel Cron](https://vercel.com/docs/cron-jobs) 调用以下接口：
 
-   - `POST /api/cron/20-seconds-metrics-interval` - Collect metrics every 20 seconds
-   - `POST /api/cron/3-minutes-run-interval` - Execute trading logic every 3 minutes
+   - `POST /api/cron/20-seconds-metrics-interval` — 每 20 秒采集指标
+   - `POST /api/cron/3-minutes-run-interval` — 每 3 分钟执行交易
 
-   Example crontab:
+   crontab 示例：
    ```bash
-   # Metrics collection (every 20 seconds)
-   * * * * * curl -X POST http://localhost:3000/api/cron/20-seconds-metrics-interval -H "Authorization: Bearer YOUR_CRON_SECRET_KEY"
-   * * * * * sleep 20 && curl -X POST http://localhost:3000/api/cron/20-seconds-metrics-interval -H "Authorization: Bearer YOUR_CRON_SECRET_KEY"
-   * * * * * sleep 40 && curl -X POST http://localhost:3000/api/cron/20-seconds-metrics-interval -H "Authorization: Bearer YOUR_CRON_SECRET_KEY"
+   # 指标采集（每 20 秒）
+   * * * * * curl -X POST http://localhost:3000/api/cron/20-seconds-metrics-interval -H "Authorization: Bearer 你的CRON密钥"
+   * * * * * sleep 20 && curl -X POST http://localhost:3000/api/cron/20-seconds-metrics-interval -H "Authorization: Bearer 你的CRON密钥"
+   * * * * * sleep 40 && curl -X POST http://localhost:3000/api/cron/20-seconds-metrics-interval -H "Authorization: Bearer 你的CRON密钥"
 
-   # Trading execution (every 3 minutes)
-   */3 * * * * curl -X POST http://localhost:3000/api/cron/3-minutes-run-interval -H "Authorization: Bearer YOUR_CRON_SECRET_KEY"
+   # 交易执行（每 3 分钟）
+   */3 * * * * curl -X POST http://localhost:3000/api/cron/3-minutes-run-interval -H "Authorization: Bearer 你的CRON密钥"
    ```
 
-Open [http://localhost:3000](http://localhost:3000) to view the dashboard.
+打开 [http://localhost:3000](http://localhost:3000) 查看仪表盘。
 
-## 📁 Project Structure
+## 📁 项目结构
 
 ```
 open-nof1.ai/
 ├── app/
 │   ├── api/
-│   │   ├── cron/              # Automated job endpoints
-│   │   ├── metrics/           # Metrics data API
-│   │   ├── pricing/           # Crypto pricing API
-│   │   └── model/chat/        # Chat history API
-│   ├── page.tsx               # Main dashboard
+│   │   ├── cron/              # 定时任务接口
+│   │   ├── metrics/           # 指标数据 API
+│   │   ├── positions/         # 持仓数据 API
+│   │   ├── pricing/           # 行情价格 API
+│   │   └── model/chat/        # 聊天记录 API
+│   ├── page.tsx               # 主仪表盘
 │   └── globals.css
 ├── components/
-│   ├── ui/                    # shadcn/ui components
-│   ├── metrics-chart.tsx      # Account value chart
-│   ├── models-view.tsx        # Trade & chat history
-│   └── crypto-card.tsx        # Price display cards
+│   ├── ui/                    # shadcn/ui 组件
+│   ├── metrics-chart.tsx      # 账户价值图表
+│   ├── models-view.tsx        # 交易与聊天记录
+│   └── crypto-card.tsx        # 价格展示卡片
 ├── lib/
 │   ├── ai/
-│   │   ├── agent/             # AI agent logic
-│   │   ├── model.ts           # Model configurations
-│   │   ├── prompt.ts          # Trading prompts
-│   │   └── tool.ts            # AI tools/functions
+│   │   ├── model.ts           # 模型配置
+│   │   ├── prompt.ts          # 交易提示词
+│   │   └── run.ts             # AI 交易主流程
 │   ├── trading/
-│   │   ├── buy.ts             # Buy execution
-│   │   ├── sell.ts            # Sell execution
+│   │   ├── buy.ts             # 买入执行
+│   │   ├── sell.ts            # 卖出执行
+│   │   ├── binance.ts         # Binance 交易所连接
+│   │   ├── gateio.ts          # Gate.io 行情客户端
 │   │   ├── current-market-state.ts
 │   │   └── account-information-and-performance.ts
-│   └── types/                 # TypeScript types
+│   └── types/                 # TypeScript 类型定义
 └── prisma/
-    └── schema.prisma          # Database schema
+    └── schema.prisma          # 数据库模式
 ```
 
-## 🎮 How It Works
+## 🎮 工作原理
 
-1. **Data Collection**: Every 20 seconds, the system collects account metrics (balance, positions, PnL)
-2. **AI Decision Making**: Every 3 minutes, the AI analyzes market data and makes trading decisions
-3. **Execution**: Approved trades are executed via Binance API
-4. **Transparency**: All reasoning, prompts, and decisions are stored in the database
-5. **Visualization**: The dashboard displays real-time performance and trade history
+1. **数据采集**：每 20 秒采集账户指标（余额、持仓、盈亏）
+2. **AI 决策**：每 3 分钟 AI 分析市场数据并做出交易决策
+3. **执行交易**：决策通过 Binance API 执行
+4. **透明记录**：所有推理、提示词、决策均存入数据库
+5. **可视化**：仪表盘实时展示绩效和交易历史
 
-### ⚙️ Configuration
+### ⚙️ 配置说明
 
-**Starting Capital** (`START_MONEY`)
-- Set your initial trading capital in USDT (Tether stablecoin)
-- Example: `START_MONEY=10000` means you start with $10,000 USDT
-- Recommended for testing: Start with small amounts (e.g., `START_MONEY=30`)
-- The AI will make trading decisions based on this available capital
-- All profits and losses are calculated relative to this starting amount
+**初始资金**（`START_MONEY`）
+- 设置 USDT 初始交易资金
+- 例如：`START_MONEY=10000` 表示初始 $10,000 USDT
+- 建议测试从小额开始（如 `START_MONEY=30`）
+- AI 将基于可用资金做出交易决策
+- 盈亏均相对于初始资金计算
 
-## 🤝 AI Models
+**DRY RUN 模式**（`DRY_RUN="true"`）
+- 启用后，AI 的 Buy/Sell 决策**不会实际调用 Binance API**
+- 交易记录写入数据库，持仓从数据库回放计算
+- 推荐初次使用此模式验证全链路
 
-Currently supported:
-- **DeepSeek V3 Chat** - Primary trading model
-- **DeepSeek R1** - Advanced reasoning model (optional)
+## 🤝 支持的 AI 模型
 
-Want to add more models? Check out the [AI SDK providers](https://sdk.vercel.ai/providers/ai-sdk-providers) and add them to `lib/ai/model.ts`!
+当前支持：
+- **DeepSeek V3 Chat** — 主力交易模型
+- **DeepSeek R1** — 高级推理模型（可选）
 
-## 📊 Dashboard Features
+想添加更多模型？查看 [AI SDK providers](https://sdk.vercel.ai/providers/ai-sdk-providers) 并在 `lib/ai/model.ts` 中添加。
 
-- **Live Crypto Prices**: Real-time prices for BTC, ETH, SOL, BNB, DOGE
-- **Account Performance Chart**: Interactive chart showing total account value over time
-- **Completed Trades**: Detailed history of all buy/sell operations
-- **Model Chat**: Full transparency into AI's chain-of-thought and decision-making
-- **Positions**: Current open positions with real-time PnL tracking
+## 📊 仪表盘功能
 
-## ⚠️ Disclaimer
+- **实时行情**：BTC、ETH、SOL、BNB、DOGE 实时价格
+- **账户绩效图表**：展示账户总价值随时间变化的交互式图表
+- **已完成交易**：所有买入/卖出操作的详细记录
+- **模型聊天**：AI 思维链和决策过程的完整透明展示
+- **持仓列表**：当前持仓及实时盈亏
 
-**This is educational/research software. Trading cryptocurrencies involves substantial risk of loss.**
+## ⚠️ 免责声明
 
-- Start with small amounts or paper trading
-- The AI model may make poor decisions
-- Past performance doesn't guarantee future results
-- You are responsible for any financial losses
-- Review and test thoroughly before using real money
+**本软件仅供教育/研究用途。加密货币交易存在重大损失风险。**
 
-## 🤔 Why Open Source?
+- 请从小额或模拟交易开始
+- AI 模型可能做出错误决策
+- 过往表现不代表未来结果
+- 任何财务损失由使用者自行承担
+- 使用真金白银前请充分测试
 
-The original [nof1.ai](https://nof1.ai) Alpha Arena is a closed competition. This open-source version aims to:
+## 🤔 为什么开源？
 
-1. **Democratize AI trading research** - Anyone can experiment with AI trading agents
-2. **Educational purposes** - Learn how AI agents make financial decisions
-3. **Transparency** - Full visibility into prompts, reasoning, and execution
-4. **Community innovation** - Improve and iterate on trading strategies together
+原 [nof1.ai](https://nof1.ai) Alpha Arena 是一个封闭竞赛。本开源版本旨在：
 
-## 📝 License
+1. **民主化 AI 交易研究** — 任何人都可以实验 AI 交易代理
+2. **教育目的** — 学习 AI 如何做出金融决策
+3. **透明性** — 提示词、推理和执行全程可见
+4. **社区创新** — 共同改进和迭代交易策略
 
-MIT License - See [LICENSE](LICENSE) file for details
+## 📝 许可证
 
-## 🙏 Acknowledgments
+MIT License — 详见 [LICENSE](LICENSE) 文件
 
-- Inspired by [nof1.ai](https://nof1.ai)'s Alpha Arena
-- **Forked from** [SnowingFox/open-nof1.ai](https://github.com/SnowingFox/open-nof1.ai) — thanks to the original author for the foundation
-- Built with [shadcn/ui](https://ui.shadcn.com/) components
-- Powered by [DeepSeek](https://www.deepseek.com/) AI models
-- Trading via [CCXT](https://github.com/ccxt/ccxt)
+## 🙏 致谢
 
-## 🔗 Links
+- 灵感来自 [nof1.ai](https://nof1.ai) 的 Alpha Arena
+- **Fork 自** [SnowingFox/open-nof1.ai](https://github.com/SnowingFox/open-nof1.ai) — 感谢原作者提供的坚实基础
+- 基于 [shadcn/ui](https://ui.shadcn.com/) 构建
+- 由 [DeepSeek](https://www.deepseek.com/) AI 模型驱动
+- 通过 [CCXT](https://github.com/ccxt/ccxt) 连接交易所
 
-- [nof1.ai Official Site](https://nof1.ai)
+## 🔗 链接
+
+- [nof1.ai 官网](https://nof1.ai)
 - [Alpha Arena](https://nof1.ai)
 - [DeepSeek](https://www.deepseek.com/)
 
@@ -231,4 +238,4 @@ MIT License - See [LICENSE](LICENSE) file for details
 
 **⚡ Built with Bun + Next.js 15 + DeepSeek + CCXT**
 
-*Markets are the ultimate test of intelligence. Let's find out if LLMs are good enough.*
+*市场是检验智能的终极测试。让我们看看 LLM 是否足够优秀。*
