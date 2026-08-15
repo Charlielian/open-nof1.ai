@@ -2,7 +2,7 @@
   "name": "open-nof1-web",
   "script": "bun",
   "args": "run start",
-  "cwd": "/Users/charlie-macmini/Documents/python/stock/open-nof1",
+  "cwd": "/path/to/project",
   "env": {
     "NODE_ENV": "production"
   },

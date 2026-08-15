@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: "open-nof1-web",
-      cwd: "/Users/charlie-macmini/Documents/python/stock/open-nof1",
+      cwd: process.env.PROJECT_DIR || "/path/to/project",
       script: "bun",
       args: "run start",
       env: {
@@ -15,7 +15,7 @@ module.exports = {
     },
     {
       name: "open-nof1-cron",
-      cwd: "/Users/charlie-macmini/Documents/python/stock/open-nof1",
+      cwd: process.env.PROJECT_DIR || "/path/to/project",
       script: "bun",
       args: "run cron.ts",
       env: {
