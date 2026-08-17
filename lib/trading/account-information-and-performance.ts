@@ -1,5 +1,6 @@
 import { Position } from "ccxt";
 import { prisma } from "@/lib/prisma";
+import { Symbol } from "@prisma/client";
 
 export interface AccountInformationAndPerformance {
   currentPositionsValue: number;
@@ -13,6 +14,9 @@ export interface AccountInformationAndPerformance {
 
 const isDryRun = () => process.env.DRY_RUN === "true";
 
+// All symbols the AI can trade, in the same format run.ts passes to ccxt.
+const ALL_PAIRS = Object.values(Symbol).map((s) => `${s}/USDT:USDT`);
+
 /**
  * Calculate positions from database Trading records (dry-run mode).
  * Replays all Buy/Sell transactions in order to compute net positions and PnL.
@@ -24,6 +28,7 @@ async function calculateDryRunPositions(
   totalCashValue: number;
   availableCash: number;
   currentTotalReturn: number;
+  currentPositionsValue: number;
 }> {
   // Fetch all trading records ordered by time
   const tradings = await prisma.trading.findMany({
@@ -64,14 +69,7 @@ async function calculateDryRunPositions(
       const soldValue = soldContracts * (t.pricing || state.lastPrice);
       state.contracts -= soldContracts;
       state.contracts = Math.max(0, state.contracts);
-      // Realized PnL from this sell
-      const costBasisForSold = state.costBasis * soldContracts;
       totalReturned += soldValue;
-      // Track realized PnL: soldValue - costBasisForSold
-      // We'll include this in totalCashValue
-      if (state.lastPrice) {
-        // Keep lastPrice updated for remaining position
-      }
       state.lastPrice = t.pricing || state.lastPrice;
     }
   }
@@ -90,7 +88,9 @@ async function calculateDryRunPositions(
     const initialMargin = notional; // 1x leverage for dry-run
 
     unrealizedPnl += upnl;
-    currentPositionsValue += initialMargin + upnl;
+    // Position value at 1x leverage = current market value (notional).
+    // Not initialMargin + unrealizedPnl, which would double-count the PnL.
+    currentPositionsValue += notional;
 
     positions.push({
       symbol: `${symbol}/USDT`,
@@ -124,8 +124,12 @@ async function calculateDryRunPositions(
   // Total cash = initial capital - spent + returned + unrealizedPnl
   // For futures: totalCashValue = initialCapital + realizedPnl + unrealizedPnl
   // realizedPnl = totalReturned - (totalSpent - (remaining cost basis))
-  const remainingCostBasis = positions.reduce(
-    (sum, p) => sum + (p.entryPrice || 0) * (p.contracts || 0),
+  // Remaining cost basis must use the exact state values — the rounded
+  // contracts/entryPrice in the Position objects (4dp / 2dp) would throw off
+  // realizedPnl by a lot for small positions (e.g. 0.00016 BTC → rounds to 0.0002).
+  const remainingCostBasis = [...stateMap.entries()].reduce(
+    (sum, [, state]) =>
+      state.contracts > 0.0001 ? sum + state.costBasis * state.contracts : sum,
     0
   );
   const costBasisClosed = totalSpent - remainingCostBasis;
@@ -137,6 +141,7 @@ async function calculateDryRunPositions(
 
   return {
     positions,
+    currentPositionsValue: Math.round(currentPositionsValue * 100) / 100,
     totalCashValue: Math.round(totalCashValue * 100) / 100,
     availableCash: Math.round(availableCash * 100) / 100,
     currentTotalReturn: Math.round(currentTotalReturn * 10000) / 10000,
@@ -158,10 +163,7 @@ export async function getAccountInformationAndPerformance(
     availableCash = dryRunResult.availableCash;
 
     return {
-      currentPositionsValue: positions.reduce(
-        (acc, p) => acc + (p.initialMargin || 0) + (p.unrealizedPnl || 0),
-        0
-      ),
+      currentPositionsValue: dryRunResult.currentPositionsValue,
       contractValue: positions.reduce((acc, p) => acc + (p.contracts || 0), 0),
       totalCashValue,
       availableCash,
@@ -174,7 +176,7 @@ export async function getAccountInformationAndPerformance(
   // Live mode: fetch from Binance
   try {
     const { binance } = await import("./binance");
-    positions = await binance.fetchPositions(["BTC/USDT"]);
+    positions = await binance.fetchPositions(ALL_PAIRS);
     const balance = await binance.fetchBalance({ type: "future" });
     const usdtInfo = balance.USDT as
       | { total?: number; free?: number }
@@ -186,7 +188,9 @@ export async function getAccountInformationAndPerformance(
   }
 
   const currentPositionsValue = positions.reduce((acc, position) => {
-    return acc + (position.initialMargin || 0) + (position.unrealizedPnl || 0);
+    // Use notional (market value) rather than initialMargin + unrealizedPnl,
+    // which would double-count the PnL.
+    return acc + (position.notional || position.initialMargin || 0);
   }, 0);
   const contractValue = positions.reduce((acc, position) => {
     return acc + (position.contracts || 0);
@@ -195,15 +199,9 @@ export async function getAccountInformationAndPerformance(
     totalCashValue > 0
       ? (totalCashValue - initialCapital) / initialCapital
       : 0;
-  const sharpeRatio =
-    positions.length > 0 &&
-    positions.reduce((s, p) => s + (p.unrealizedPnl || 0), 0) !== 0
-      ? currentTotalReturn /
-        (positions.reduce((acc, position) => {
-          return acc + (position.unrealizedPnl || 0);
-        }, 0) /
-          initialCapital)
-      : 0;
+  // Sharpe ratio is not meaningful without a time-series of returns.
+  // Dry-run mode always returns 0; live mode also returns 0 for consistency.
+  const sharpeRatio = 0;
 
   return {
     currentPositionsValue,

@@ -194,15 +194,34 @@ export function ModelsView() {
                   </div>
                 )}
 
-                {/* Amount */}
+                {/* Amount — Buy: USDT投入, Sell: 平仓比例 */}
                 {trade.amount && (
+                  <div className="space-y-1">
+                    <div className="text-xs text-muted-foreground font-medium">
+                      {trade.opeartion === "Sell" ? "平仓比例" : "投入金额"}
+                    </div>
+                    <div className="font-mono font-semibold">
+                      {trade.opeartion === "Sell"
+                        ? `${trade.amount}%`
+                        : `$${trade.amount.toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}`}
+                    </div>
+                  </div>
+                )}
+
+                {/* 数量（仅 Buy 时由 amount / pricing 换算） */}
+                {trade.opeartion === "Buy" && trade.amount && trade.pricing && (
                   <div className="space-y-1">
                     <div className="text-xs text-muted-foreground font-medium">
                       数量
                     </div>
                     <div className="font-mono font-semibold">
-                      {trade.amount}{" "}
-                      {trade.symbol?.includes("/") ? "units" : trade.symbol}
+                      {(trade.amount / trade.pricing).toLocaleString(undefined, {
+                        maximumFractionDigits: 6,
+                      })}{" "}
+                      {trade.symbol}
                     </div>
                   </div>
                 )}
@@ -219,21 +238,19 @@ export function ModelsView() {
                   </div>
                 )}
 
-                {/* Total Value */}
-                {trade.pricing && trade.amount && (
+                {/* Total Value — Buy: amount 就是 USDT 价值; Sell: 只显示百分比 */}
+                {trade.amount && (
                   <div className="space-y-1">
                     <div className="text-xs text-muted-foreground font-medium">
-                      总价值
+                      {trade.opeartion === "Sell" ? "参考价值" : "总价值"}
                     </div>
                     <div className="font-mono font-bold text-base">
-                      $
-                      {(trade.pricing * trade.amount).toLocaleString(
-                        undefined,
-                        {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        }
-                      )}
+                      {trade.opeartion === "Sell"
+                        ? `${trade.amount}% 持仓`
+                        : `$${trade.amount.toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}`}
                     </div>
                   </div>
                 )}
@@ -414,10 +431,20 @@ export function ModelsView() {
                               {decision.amount && (
                                 <div className="flex justify-between items-center">
                                   <span className="text-muted-foreground">
-                                    数量:
+                                    {decision.opeartion === "Sell"
+                                      ? "平仓比例:"
+                                      : "投入金额:"}
                                   </span>
                                   <span className="font-mono font-semibold">
-                                    {decision.amount}
+                                    {decision.opeartion === "Sell"
+                                      ? `${decision.amount}%`
+                                      : `$${decision.amount.toLocaleString(
+                                          undefined,
+                                          {
+                                            minimumFractionDigits: 2,
+                                            maximumFractionDigits: 2,
+                                          }
+                                        )}`}
                                   </span>
                                 </div>
                               )}
@@ -434,13 +461,20 @@ export function ModelsView() {
                               {decision.pricing && decision.amount && (
                                 <div className="flex justify-between items-center pt-1.5 mt-1.5 border-t border-current/20">
                                   <span className="text-muted-foreground font-semibold">
-                                    合计:
+                                    {decision.opeartion === "Sell"
+                                      ? "平仓比例:"
+                                      : "合计:"}
                                   </span>
                                   <span className="font-mono font-bold">
-                                    $
-                                    {(
-                                      decision.pricing * decision.amount
-                                    ).toLocaleString()}
+                                    {decision.opeartion === "Sell"
+                                      ? `${decision.amount}%`
+                                      : `$${decision.amount.toLocaleString(
+                                          undefined,
+                                          {
+                                            minimumFractionDigits: 2,
+                                            maximumFractionDigits: 2,
+                                          }
+                                        )}`}
                                   </span>
                                 </div>
                               )}
